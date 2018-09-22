@@ -1,0 +1,55 @@
+#!/bin/bash
+
+last=""
+jar=""
+javaagent=""
+classpath=""
+
+function unquote() {
+    line="$1"
+    if [ ${line:0:1} == '"' -o ${line:0:1} == "'" ]; then
+        length=${#line}
+        echo ${line:1:$((length -2 ))}
+    else
+        echo $line
+    fi
+}
+
+function parse() {
+    line=`unquote "$1"`
+    if [ -n "$line" ]; then
+        if [[ $line =~ ^@ ]]; then
+            parse_file "${line:1}"
+        elif [[ $line =~ ^-AJAR=* ]]; then
+            jar="${line:6}"
+        elif [[ $line =~ ^-AJAVAAGENT=* ]]; then
+            javaagent="${line:12}"
+        elif [[ $last =~ ^-classpath* ]]; then
+            classpath="$line"
+        elif [[ $last =~ ^-cp* ]]; then
+            classpath="$line"
+        fi
+        last="$line"
+    fi
+}
+
+function parse_file() {
+    file="$1"
+    if [ -f "$file" ]; then
+        while read line; do
+            parse "$line"
+        done < "$file"
+    fi
+}
+
+for argument; do
+    parse "$argument"
+done
+
+if [ -z "$jar" ]; then
+    exec javac "$@"
+elif [ -n "$javaagent" ]; then
+    exec java -Xbootclasspath/a:"$classpath" -javaagent:"$javaagent" -jar "$jar" "$@"
+else
+    exec java -Xbootclasspath/a:"$classpath" -jar "$jar" "$@"
+fi
