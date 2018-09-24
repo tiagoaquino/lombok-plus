@@ -48,17 +48,23 @@
 ## Use it in `maven`: 
 
 ```xml
+<repositories>
+	<repository>
+		<id>lombok-plus-repository</id>
+		<url>https://mymavenrepo.com/repo/i6snxdlhoCnIrcRNt98A/</url>
+	</repository>
+</repositories>
+...
 <dependency>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
-        <!-- lombok 1.16.X use shadow class loader, which prevents load lombok extension -->
-        <version>1.14.8</version>
+        <version>1.18.2</version>
         <scope>provided</scope>
 </dependency>
 <dependency>
-        <groupId>org.github.tiagoaquino</groupId>
+        <groupId>com.github.tiagoaquino</groupId>
         <artifactId>lombok-plus</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
         <scope>provided</scope>
 </dependency>
 ```

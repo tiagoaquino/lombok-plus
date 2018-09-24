@@ -10,3 +10,7 @@
 /test-output
 
 /target
+/.classpath
+/.factorypath
+/.project
+.settings/
