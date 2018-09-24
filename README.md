@@ -55,18 +55,20 @@
 	</repository>
 </repositories>
 ...
-<dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>1.18.2</version>
-        <scope>provided</scope>
-</dependency>
-<dependency>
-        <groupId>com.github.tiagoaquino</groupId>
-        <artifactId>lombok-plus</artifactId>
-        <version>1.0.0</version>
-        <scope>provided</scope>
-</dependency>
+<dependencies>
+    <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.2</version>
+            <scope>provided</scope>
+    </dependency>
+    <dependency>
+            <groupId>com.github.tiagoaquino</groupId>
+            <artifactId>lombok-plus</artifactId>
+            <version>1.0.1</version>
+            <scope>provided</scope>
+    </dependency>
+</dependencies>
 ```
 
 For `eclipse`, please compile it with profile `eclipse`, then run `java -jar target/lombok-*-eclipse.jar`:
