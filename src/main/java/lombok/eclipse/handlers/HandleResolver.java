@@ -45,7 +45,7 @@ import org.eclipse.jdt.internal.compiler.ast.TypeDeclaration;
 import org.eclipse.jdt.internal.compiler.ast.TypeReference;
 import org.eclipse.jdt.internal.compiler.classfmt.ClassFileConstants;
 import org.eclipse.jdt.internal.compiler.lookup.TypeIds;
-//import org.mangosdk.spi.ProviderFor;
+import org.mangosdk.spi.ProviderFor;
 
 import lombok.AccessLevel;
 import lombok.Resolver;
@@ -59,7 +59,7 @@ import lombok.eclipse.handlers.EclipseHandlerUtil.MemberExistsResult;
 /**
  * Handles the {@code lombok.Setter} annotation for eclipse.
  */
-//@ProviderFor(EclipseAnnotationHandler.class)
+@ProviderFor(EclipseAnnotationHandler.class)
 public class HandleResolver extends EclipseAnnotationHandler<Resolver> {
 	public boolean generateResolversForType(EclipseNode typeNode, EclipseNode pos, AccessLevel level,
 			boolean checkForTypeLevelResolvers, List<Annotation> onMethod, List<Annotation> onParam) {

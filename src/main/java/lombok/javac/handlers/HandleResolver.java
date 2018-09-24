@@ -56,7 +56,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-//import org.mangosdk.spi.ProviderFor;
+import org.mangosdk.spi.ProviderFor;
 
 import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.code.Symbol.ClassSymbol;
@@ -94,7 +94,7 @@ import lombok.javac.handlers.JavacHandlerUtil.CopyJavadoc;
 /**
  * Handles the {@code lombok.Resolver} annotation for javac.
  */
-//@ProviderFor(JavacAnnotationHandler.class) 
+@ProviderFor(JavacAnnotationHandler.class) 
 public class HandleResolver extends JavacAnnotationHandler<Resolver> {
 
 	private static final String JAVA_SUPPLIER = "java.util.function.Supplier";

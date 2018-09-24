@@ -6,11 +6,11 @@
 
 	<groupId>com.github.tiagoaquino</groupId>
 	<artifactId>lombok-plus</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 
 	<repositories>
 		<repository>
-			<id>lombok-plus-repository</id>
+			<id>myMavenRepoRead</id>
 			<url>https://mymavenrepo.com/repo/i6snxdlhoCnIrcRNt98A/</url>
 		</repository>
 	</repositories>
@@ -26,12 +26,12 @@
 
 	<distributionManagement>
 		<repository>
-			<id>lombok-plus-repository</id>
-			<url>${lombok-plus-repository-url}</url>
+			<id>myMavenRepoWrite</id>
+			<url>${myMavenRepoWriteUrl}</url>
 		</repository>
 		<snapshotRepository>
-			<id>lombok-plus-repository</id>
-			<url>${lombok-plus-repository-url}</url>
+			<id>myMavenRepoWrite</id>
+			<url>${myMavenRepoWriteUrl}</url>
 		</snapshotRepository>
 	</distributionManagement>
 
@@ -40,6 +40,12 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>${lombok.version}-classes</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mangosdk.spi</groupId>
+			<artifactId>spi</artifactId>
+			<version>0.2.7-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -196,6 +202,7 @@
 						<version>1.8</version>
 						<executions>
 							<execution>
+								<id>antes</id>
 								<phase>process-resources</phase>
 								<configuration>
 									<target>
@@ -209,7 +216,49 @@
 									<goal>run</goal>
 								</goals>
 							</execution>
+							<execution>
+								<id>depois</id>
+								<phase>prepare-package</phase>
+								<configuration>
+									<target>
+										<move todir="${lombok.classpath}" overwrite="true">
+											<fileset dir="${lombok.classpath}">
+												<exclude name="com/sun/tools/javac/**" />
+												<exclude name="module-info.class" />
+												<exclude name="lombok/*.class" />
+												<exclude name="lombok/javac/apt/Processor.class" />
+												<exclude name="lombok/experimental/**" />
+												<exclude name="lombok/extern/**" />
+												<exclude name="lombok/launch/**" />
+												<exclude name="lombok/delombok/ant/Tasks*" />
+											</fileset>
+											<mapper type="glob" from="*.class" to="*.SCL.lombok" />
+										</move>
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
 						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.1.1</version>
+						<executions>
+							<execution>
+								<id>some-execution</id>
+								<phase>prepare-package</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<executable>bash</executable>
+							<commandlineArgs>-c "ls -la ${lombok.classpath}/.."</commandlineArgs>
+						</configuration>
 					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -249,14 +298,15 @@
 								<configuration>
 									<finalName>lombok-${lombok.version}-patched</finalName>
 									<transformers>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<!-- <transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
 											<resources>
 												<resource>META-INF/ShadowClassLoader</resource>
 											</resources>
-										</transformer>
+										</transformer> 
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ResourceBundleAppendingTransformer">
+							                  <basename>path/to/Messages</basename>
+						                </transformer>-->
 									</transformers>
 									<filters>
 										<filter>
